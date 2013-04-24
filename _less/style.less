@@ -1,0 +1,54 @@
+
+@import "_config";
+
+html, body {
+	height: @full-size;
+	width: @full-size;
+	background: @white;
+	padding: 0;
+	margin: 0;
+	color: @black;
+	font-size: 62.5%;
+	line-height: @full-size;
+	font-family: @sans;
+}
+
+* {
+	.box-sizing;
+}
+
+
+ol, ul {
+	margin: 0;
+	padding: 0;
+	list-style: inside;
+}
+
+p {
+	margin: 0;
+	padding: 10px 0;
+}
+
+strong {
+	display: block;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	margin: 0;
+	padding: 10px 0;
+}
+
+
+
+#page-wrap {
+	width: @max-width;
+	margin: 0 auto;
+	.box-shadow(0 0 5px rgba(0,0,0,0.5));
+}
+
+#body {
+	padding: 20px;
+}
+
+@import "funslider";

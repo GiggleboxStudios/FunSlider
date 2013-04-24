@@ -1,0 +1,60 @@
+
+@import "_config";
+
+/* ===== SLIDESHOW STYLES ===== **/
+
+#slideshow {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  max-width: @full-size;
+  height: 500px;
+  border: 1px solid @light-gray;
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+
+  .slideshow-contents {
+    display: block;
+    overflow: hidden;
+    height: @full-size;
+  }
+
+  .slide {
+    display: block;
+    position: relative;
+    height: @full-size;
+  }
+
+  .indexes {
+
+    text-align: center;
+
+    .index-button {
+      display: inline-block;
+      border: 0;
+      border-radius: 15px;
+      height: 18px;
+      width: 18px;
+      margin: 0 3px;
+      background: @light-gray;
+    }
+
+    .active-index {
+      background: @gray;
+    }
+  }
+}
+
+.no-js {
+  #slideshow {
+
+    > li, > div {
+      display: none;
+      height: @full-size;
+
+      &:first-child {
+        display: block;
+      }
+    }
+  }
+}
