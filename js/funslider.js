@@ -1,13 +1,11 @@
-/*jshint strict:true, evil:true, boss:false, laxcomma:true, latedef:true, immed:true, newcap:true, noarg:true, nonew:true, plusplus:true, regexp:true, undef:true, unused:true, trailing:true, eqeqeq:true, curly:true, camelcase:true, bitwise:true */
-/*global jQuery:true, window:true */
-
+/*jshint strict:true, evil:true, boss:false, laxbreak:true, laxcomma:true, latedef:true, immed:true, newcap:true, noarg:true, nonew:true, plusplus:true, regexp:true, undef:true, unused:true, trailing:true, eqeqeq:true, curly:true, camelcase:true, bitwise:true */
 /**
  * @name          FunSlider.js
  * @author        Brandtley McMinn
  * @version       1.0
  * -------------------------------------------------------------
  *
- * @description   Creates a flexible, functional slideshow for use in your web page that is entirely controlled by CSS
+ * @description   Creates a flexible, functional $slideshow for use in your web page that is entirely controlled by CSS
  *
  * @requires      jQuery >= 1.4.2, modernizr
  *
@@ -41,46 +39,49 @@
 
   $.fn.funSlider = function(options) {
 
-    var defaults = {
+    var defaults =  {
+                      // Usual options
+                        displayButtons:     false   // Show next/prev controls
+                      , displayIndexes:     false   // Show slide index markers
+                      , interval:           3       // Time in seconds between class changes
+                      , enableKeyboard:     false   // We have keyboard integration for left and right arrow keys
+                      , showFrames:         0       // Show this many slides at one time
 
-        // Usual options
-          displayButtons:     false
-        , displayIndexes:     false
-        , interval:           3
+                      // Defaults by default.
+                      , carousel:           true    // Enables carousel mode
+                      , hoverDelay:         true    // Determines if the slideshow should stop animating on hover
+                      , prevText:           'Prev'
+                      , nextText:           'Next'
 
-        // Defaults by default.
-        , prevText:           'Prev'
-        , nextText:           'Next'
-        , hoverDelay:         true
-
-        // Fallbacks in case browser support isn't viable
-        , fallbackTransition: 'fade'
-        , fallbackDuration:   0.5
-
-        } // defaults
+                      // Fallbacks provided in case browser support isn't viable
+                      , fallbackTransition: 'fade'
+                      , fallbackDuration:   0.5
+                    } // defaults
 
       , settings
-      , i                     = 1
-      , indexContent          = ''
-      , indexes
-      , indexButtons
-      , slideshow             = $(this)
-      , slideshowID           = slideshow.attr('id')
-      , timeInterval          = 0
-      , timeDuration          = 0
-      , slideshowInterval
-      , slides
-      , slideCounter          = 1
-      , slideCount
-      , slidesWrapper         = 'div'
+      , $i                    = 1
+      , $indexContent         = ''
+      , $indexes
+      , $indexButtons
+      , $slideshow            = $(this)
+      , $slideshowID          = $slideshow.attr('id')
+      , $timeInterval         = 0
+      , $timeDuration         = 0
+      , $slideshowInterval
+      , $frameCount
+      , $nextButton
+      , $prevButton
+      , $slideCount
+      , $slideCounter         = 1
+      , $slidesWrapper        = 'div'
+      , $slides
 
       // Use this to cache contents when performing replacements
-      , tempContent
+      , $tempContent
 
       // TIME BASED VARIABLES
-      , seconds               = 1000
+      , $seconds               = 1000
       ;
-
 
 
     var FunSlider = {
@@ -91,92 +92,111 @@
        */
       init: function() {
 
+        var content   = '';
+
         // Combobulate our settings
         settings      = $.extend({}, defaults, options);
 
-        // Convert our seconds to milliseconds
-        timeInterval  = settings.interval * seconds;
-        timeDuration  = settings.fallbackDuration * seconds;
+        // Convert our $seconds to milliseconds
+        $timeInterval = settings.interval * $seconds;
+        $timeDuration = settings.fallbackDuration * $seconds;
 
-        // Tempcache slideshow contents
-        tempContent   = slideshow.html();
+        // Get total number of frames to show
+        $frameCount   = settings.showFrames;
 
-        // Rebuild slideshow container with proper DIV wrapper
-        slideshow.replaceWith('<div id="' + slideshowID + '">' + tempContent + '</div>');
+        // Tempcache $slideshow contents
+        $tempContent  = $slideshow.html();
 
-        // Re-cache #slideshow since it was lost after .replaceWith()
-        slideshow     = $('#' + slideshowID);
-
-        // Find all our slides and give them a class of .slide
-        slides        = slideshow.find('li,div');
-
-        // Tempcache our slides
-        tempContent   = slideshow.html();
+        // Find all our slides
+        $slides       = $slideshow.find('li,div');
 
         // Test if we're using DIV's or LI's for our slides and use an UL if appropriate
-        if (slides.eq(0).is('li')) {
-          slidesWrapper = 'ul';
+        if ($slides.eq(0).is('li')) {
+          $slidesWrapper = 'ul';
         }
 
-        // Wrap slides with container
-        slideshow.html('<' + slidesWrapper + ' class="slide-container">' + tempContent + '</' + slidesWrapper + '>');
+        // Rebuild $slideshow container with proper DIV wrapper
+        content = '<div id="' + $slideshowID + '">'
+                +   '<' + $slidesWrapper + ' class="slide-container">' + $tempContent + '</' + $slidesWrapper + '>'
+                + '</div>';
 
-        // Append class to each slide
-        $('.slide-container').children().addClass('slide');
+        $slideshow.replaceWith(content);
 
-        // Re-assign slides to .slide elements
-        slides        = $('.slide');
+        // Re-cache #slideshow since it was lost after .replaceWith()
+        $slideshow  = $('#' + $slideshowID);
+
+        // Re-cache all our slides
+        $slides     = $slideshow.find('li, div').addClass('slide');
 
         // Utilize our slides data for something
-        slides.each(function() {
+        $slides.each(function() {
 
           // Assign a unique ID to each slide
-          $(this).attr('id', 'slide-' + i).attr('data-slideID', i);
+          $(this).attr('id', 'slide-' + $i).attr('data-slideID', $i);
 
           // Build our list of indexes
-          indexContent += '<button class="index-button" data-slideID="' + i + '">' + i + '</button>';
+          $indexContent += '<button class="index-button" data-slideID="' + $i + '">' + $i + '</button>';
 
-          i += 1;
+          $i += 1;
         });
 
         // Reset 'i' to 1
-        i = 1;
+        $i = 1;
 
         // Count number of slides
-        slideCount    = slides.length;
+        $slideCount = $slides.length;
 
         // Make our first slide active
-        slides.eq(0).addClass('active-slide');
+        $slides.eq(0).addClass('active-slide');
 
         // If we're showing next|prev buttons, add them
         if (settings.displayButtons) {
-          slideshow.append('<div class="controls"><button class="prev">' + settings.prevText + '</button><button class="next">' + settings.nextText + '</button></div>');
+          content = '<div class="controls">'
+                  +   '<button class="prev">' + settings.prevText + '</button>'
+                  +   '<button class="next">' + settings.nextText + '</button>'
+                  + '</div>'
+                  ;
+
+          $slideshow.append(content);
+
+          // Cache the buttons
+          $prevButton = $slideshow.find('button.prev');
+          $nextButton = $slideshow.find('button.next');
         }
 
         // If we're showing slide indexes, add them
         if (settings.displayIndexes) {
-          slideshow.append('<div class="indexes">' + indexContent +'</div>');
-          indexes       = $('.indexes');
-          indexButtons  = $('.index-button');
-          indexButtons.eq(0).addClass('active-index');
+          content = '<div class="indexes">' + $indexContent +'</div>';
+          $slideshow.append(content);
+          $indexes      = $('.indexes');
+          $indexButtons = $('.index-button');
+          $indexButtons.eq(0).addClass('active-index');
         }
 
         return;
-
       } // init();
 
 
 
       /**
-       * Initializes a Timer interval object to run our slideshow automagically
+       * Initializes a Timer interval object to run our $slideshow automagically
        */
     , runSlideshow: function() {
-
-        slideshowInterval = window.setInterval(function() {
-          FunSlider.toggleSlides(1);
-        }, timeInterval);
-
+        if (settings.interval) {
+          $slideshowInterval = window.setInterval(function() {
+            FunSlider.toggleSlides(1);
+          }, $timeInterval);
+        }
       } // .runSlideshow
+
+
+
+      /**
+       * Handle to disable slideshow automation
+       */
+    , killSlideshow: function() {
+        window.clearInterval($slideshowInterval);
+      }
 
 
 
@@ -187,35 +207,37 @@
     , toggleSlides: function(direction) {
 
         // Increment/Decrement our slide counter
-        slideCounter += direction;
+        $slideCounter += direction;
 
-        // Compare slideCounter to slides.length
-
-        // If we're over the number of slides, reset to zero and start the slideshow over
-        if (slideCounter > slideCount) {
-          slideCounter = 1;
+        // If we're over the number of slides, reset to zero and start the $slideshow over
+        if ($slideCounter > $slideCount) {
+          $slideCounter = 1;
 
         // If we're under 0, reset counter to
-        } else if (slideCounter <= 0) {
-          slideCounter = slideCount;
+        } else if ($slideCounter <= 0) {
+          $slideCounter = $slideCount;
         }
 
         // Reset all slides to remove .active-slide
-        slides.removeClass('active-slide');
+        $slides.removeClass('active-slide previous-slide next-slide');
 
         // Set .active-slide
-        slides.eq(slideCounter - 1).addClass('active-slide');
-        console.log('active-slide ' + slideCounter);
+        $slides.eq($slideCounter - 1).addClass('active-slide');
+
+
+  // TODO - Figure out how to stage next/previous slides without adding
+  //        a ridiculous number of classes and if/else statements
+
 
         // Are we using indexes?
         if (settings.displayIndexes) {
-
           // Reset all indexes to remove .active-index
-          indexButtons.removeClass('active-index');
-          indexButtons.eq(slideCounter - 1).addClass('active-index');
+          $indexButtons.removeClass('active-index');
+          $indexButtons.eq($slideCounter - 1).addClass('active-index');
         }
+      } // .toggleSlides()
 
-      } // .toggleSlides
+
 
       /**
        * Manages class assignments when we click a specific slide index
@@ -223,61 +245,97 @@
        */
     , setSlides: function(slideIndex) {
 
-        // Reset our slideCounter to slideIndex
-        slideCounter = slideIndex;
+        // Reset our $slideCounter to slideIndex
+        $slideCounter = slideIndex;
 
         // Reset all slides to remove .active-slide
-        slides.removeClass('active-slide');
+        $slides.removeClass('active-slide');
 
         // Set .active-slide
-        slides.eq(slideCounter).addClass('active-slide');
+        $slides.eq($slideCounter).addClass('active-slide');
 
         // Are we using indexes?
         if (settings.displayIndexes) {
-
-          // Reset all indexes to remove .active-index
-          indexButtons.removeClass('active-index');
-          indexButtons.eq(slideCounter).addClass('active-index');
+          $indexButtons.removeClass('active-index');
+          $indexButtons.eq($slideCounter).addClass('active-index');
         }
-      }
+      } // .setSlides()
+
 
 
       /**
-       * [navSlideshow description]
+       * Handles button clicks and bumps the slides as necessary
        * @return {[type]} [description]
        */
     , navSlideshow: function() {
 
+        // Are we using indexes?
+        if (settings.displayIndexes) {
+          $indexButtons.click(function() {
+            var $this = $(this);
+            FunSlider.setSlides($this.attr('data-slideid') - 1);
+          });
+        }
 
-      } // .navSlideshow
+        // Are we using buttons
+        if (settings.displayButtons) {
+          $nextButton.click(function() {
+            FunSlider.toggleSlides(1);
+          });
+
+          $prevButton.click(function() {
+            FunSlider.toggleSlides(-1);
+          });
+        }
+
+        // Are we using keyboard input?
+        if (settings.enableKeyboard) {
+          $(window).keydown(function (e) {
+            var keyCode = e.keyCode || e.which
+              , arrow   = { left: 37, up: 38, right: 39, down: 40 };
+
+            switch (keyCode) {
+              case arrow.left:
+                FunSlider.toggleSlides(-1);
+                break;
+
+              case arrow.right:
+                FunSlider.toggleSlides(1);
+                break;
+            }
+
+            // When we .keydown, clear the interval and reset the interval
+            FunSlider.killSlideshow();
+
+            // TODO: Figure out error where we get multiple .runSlideshow instances rolling...
+            // FunSlider.runSlideshow();
+
+          });
+        }
+      } // .navSlideshow()
 
     }; // var FunSlider = {...}
 
 
     // starts the party <:-)
     FunSlider.init();
-
-    // Init slideshow interval
-    FunSlider.runSlideshow();
-
-    // Make our Prev|Next Buttons work
-    FunSlider.navSlideshow();
-
+    FunSlider.runSlideshow();   // Init $slideshow interval
+    FunSlider.navSlideshow();   // Make our Prev|Next Buttons work
 
     // If there is only one slide, don't animate it
-    if (slideCount <= 1) {
-      window.clearInterval(slideshowInterval);
+    if ($slideCount <= 1) {
+      FunSlider.killSlideshow();
 
     } else {
 
       // Determine if we're hovering a slide and delay
-      slideshow.hover(function() {
-        window.clearInterval(slideshowInterval);
-        console.log('hoverOn: clear interval');
+      $slideshow.hover(function() {
+        FunSlider.killSlideshow();
+        // console.log('hoverOn: clear interval');
 
       }, function() {
         FunSlider.runSlideshow();
-        console.log('hoverOff: runSlideshow');
+        // console.log('hoverOff: runSlideshow');
 
       });
 

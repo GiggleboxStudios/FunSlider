@@ -3,6 +3,20 @@
 
 /* ===== SLIDESHOW STYLES ===== **/
 
+@buttons-height:      1500;
+@slides-height:       800;
+@active-slide-height: 1000;
+
+// Index button colors
+@index-color:         @light-gray;
+@index-active-color:  #f90;
+
+
+// Next/Prev button colors
+@np-button-color:     @light-gray;
+@np-button-hover:     #f90;
+
+
 #slideshow {
   position: relative;
   display: block;
@@ -13,35 +27,93 @@
   font-size: 1.6rem;
   line-height: 1.6rem;
 
-  .slideshow-contents {
+  //===================================
+  // Slides
+  //===================================
+
+  // <ul> wrapper for all slides
+  .slide-container {
     display: block;
     overflow: hidden;
-    height: @full-size;
+    height: inherit;
   }
 
+  // Each slide you added to the markup
   .slide {
+    .transition;
+    position: absolute;
     display: block;
-    position: relative;
+    width: @full-size;
     height: @full-size;
+    opacity: 0;
   }
 
-  .indexes {
+  // The currently active slide
+  .active-slide {
+    .transition;
+    z-index: @active-slide-height;
+    opacity: 1;
+  }
 
+  //===================================
+  // Controls
+  //===================================
+
+  // Index button wrapper container
+  .indexes {
+    position: absolute;
+    right: 0;
+    bottom: 30px;
+    left: 0;
+    z-index: @buttons-height;
+    margin: 0 auto;
     text-align: center;
 
+    // Index button styles
     .index-button {
       display: inline-block;
-      border: 0;
-      border-radius: 15px;
-      height: 18px;
-      width: 18px;
       margin: 0 3px;
-      background: @light-gray;
+      width: 18px;
+      cursor: pointer;
+      height: 18px;
+      border: 0;
+      font-size: 0;
+      border-radius: 15px;
+      background: @index-color;
+      .transition;
     }
 
     .active-index {
-      background: @gray;
+      background: @index-active-color;
+      .transition;
     }
+  }
+
+  .controls button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: @buttons-height;
+    margin: auto;
+    width: 50px;
+    height: 50%;
+    border: 0;
+    background: @np-button-color;
+    .transition;
+
+    &:hover {
+      background: @np-button-hover;
+      .transition;
+
+    }
+  }
+
+  .prev {
+    left: -50px;
+  }
+
+  .next {
+    right: -50px;
   }
 }
 

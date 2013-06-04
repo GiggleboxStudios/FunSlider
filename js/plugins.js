@@ -1,9 +1,18 @@
 (function($) {
 
   $('#slideshow').funSlider({
-    interval:       1
-  , displayIndexes: true
+    displayIndexes: true
   , displayButtons: true
+  , showFrames:     5
+  , interval:       3
+  , enableKeyboard: true
   });
 
-})(jQuery)
+
+  $('#product-slider').funSlider({
+    displayButtons: true
+  , showFrames:     5
+  , interval:       2
+  });
+
+})(jQuery);

@@ -1,0 +1,11 @@
+TODO for FunSlider:
+ ☐ Integrate "Carousel" option
+ ☐ Set slide index animate to have hard limits when "carousel" option is disabled
+ ☐ FunSlider.killSlideshow() followed by FS.runSlideshow() causes dual slideshow interval instances
+ ☐ Setup Modernizr support for transition fallback
+ ☐ Setup CSS for multi-frame slider
+
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ Set global z-index values in CSS to avoid issues with hard-coded z-index @done (13-06-03 11:36)
