@@ -17,7 +17,7 @@
 @np-button-hover:     #f90;
 
 
-#slideshow {
+.funSlider {
   position: relative;
   display: block;
   margin: 0 auto;
@@ -33,8 +33,10 @@
 
   // <ul> wrapper for all slides
   .slide-container {
+    position: relative;
     display: block;
     overflow: hidden;
+    width: @full-size;
     height: inherit;
   }
 
@@ -54,6 +56,35 @@
     z-index: @active-slide-height;
     opacity: 1;
   }
+
+  &.multi-frames {
+    height: 12rem;
+
+    .slide {
+      left: @full-size;
+      z-index: 0;
+      width: auto;
+      opacity: 1;
+
+      img {
+        width: @full-size;
+      }
+    }
+
+    .previous-slide {
+      z-index: 100;
+    }
+
+    // Next slide when using frames
+    .next-slide {
+      top: 0;
+      z-index: 1000;
+      display: block;
+      opacity: 1;
+    }
+  }
+
+
 
   //===================================
   // Controls

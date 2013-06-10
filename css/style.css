@@ -57,8 +57,11 @@ h6,
 #body {
   padding: 20px;
 }
+.break {
+  height: 50px;
+}
 /* ===== SLIDESHOW STYLES ===== **/
-#slideshow {
+.funSlider {
   position: relative;
   display: block;
   margin: 0 auto;
@@ -68,12 +71,14 @@ h6,
   font-size: 1.6rem;
   line-height: 1.6rem;
 }
-#slideshow .slide-container {
+.funSlider .slide-container {
+  position: relative;
   display: block;
   overflow: hidden;
+  width: 100%;
   height: inherit;
 }
-#slideshow .slide {
+.funSlider .slide {
   -webkit-transition: 0.3s linear all;
   -moz-transition: 0.3s linear all;
   -o-transition: 0.3s linear all;
@@ -85,7 +90,7 @@ h6,
   height: 100%;
   opacity: 0;
 }
-#slideshow .active-slide {
+.funSlider .active-slide {
   -webkit-transition: 0.3s linear all;
   -moz-transition: 0.3s linear all;
   -o-transition: 0.3s linear all;
@@ -94,7 +99,28 @@ h6,
   z-index: 1000;
   opacity: 1;
 }
-#slideshow .indexes {
+.funSlider.multi-frames {
+  height: 12rem;
+}
+.funSlider.multi-frames .slide {
+  left: 100%;
+  z-index: 0;
+  width: auto;
+  opacity: 1;
+}
+.funSlider.multi-frames .slide img {
+  width: 100%;
+}
+.funSlider.multi-frames .previous-slide {
+  z-index: 100;
+}
+.funSlider.multi-frames .next-slide {
+  top: 0;
+  z-index: 1000;
+  display: block;
+  opacity: 1;
+}
+.funSlider .indexes {
   position: absolute;
   right: 0;
   bottom: 30px;
@@ -103,7 +129,7 @@ h6,
   margin: 0 auto;
   text-align: center;
 }
-#slideshow .indexes .index-button {
+.funSlider .indexes .index-button {
   display: inline-block;
   margin: 0 3px;
   width: 18px;
@@ -119,7 +145,7 @@ h6,
   -ms-transition: 0.3s linear all;
   transition: 0.3s linear all;
 }
-#slideshow .indexes .active-index {
+.funSlider .indexes .active-index {
   background: #ff9900;
   -webkit-transition: 0.3s linear all;
   -moz-transition: 0.3s linear all;
@@ -127,7 +153,7 @@ h6,
   -ms-transition: 0.3s linear all;
   transition: 0.3s linear all;
 }
-#slideshow .controls button {
+.funSlider .controls button {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -143,7 +169,7 @@ h6,
   -ms-transition: 0.3s linear all;
   transition: 0.3s linear all;
 }
-#slideshow .controls button:hover {
+.funSlider .controls button:hover {
   background: #ff9900;
   -webkit-transition: 0.3s linear all;
   -moz-transition: 0.3s linear all;
@@ -151,10 +177,10 @@ h6,
   -ms-transition: 0.3s linear all;
   transition: 0.3s linear all;
 }
-#slideshow .prev {
+.funSlider .prev {
   left: -50px;
 }
-#slideshow .next {
+.funSlider .next {
   right: -50px;
 }
 .no-js #slideshow > li,

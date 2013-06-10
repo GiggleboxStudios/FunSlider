@@ -1,18 +1,17 @@
 (function($) {
 
   $('#slideshow').funSlider({
-    displayIndexes: true
+    interval:       3
   , displayButtons: true
-  , showFrames:     5
-  , interval:       3
+  , displayIndexes: true
   , enableKeyboard: true
   });
 
 
   $('#product-slider').funSlider({
-    displayButtons: true
-  , showFrames:     5
-  , interval:       2
+    interval:       0
+  , showFrames:     8
+  , displayButtons: true
   });
 
 })(jQuery);

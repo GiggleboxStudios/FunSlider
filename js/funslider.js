@@ -68,7 +68,8 @@
       , $timeInterval         = 0
       , $timeDuration         = 0
       , $slideshowInterval
-      , $frameCount
+      , $frameCount           = 0
+      , $frameCounter         = 0
       , $nextButton
       , $prevButton
       , $slideCount
@@ -104,6 +105,12 @@
         // Get total number of frames to show
         $frameCount   = settings.showFrames;
 
+        // Make it so we can show frames if necessary
+        if ($frameCount) {
+          // console.log('showing slides ', settings.showFrames);
+          content = ' multi-frames';
+        }
+
         // Tempcache $slideshow contents
         $tempContent  = $slideshow.html();
 
@@ -116,7 +123,7 @@
         }
 
         // Rebuild $slideshow container with proper DIV wrapper
-        content = '<div id="' + $slideshowID + '">'
+        content = '<div id="' + $slideshowID + '" class="funSlider' + content + '">'
                 +   '<' + $slidesWrapper + ' class="slide-container">' + $tempContent + '</' + $slidesWrapper + '>'
                 + '</div>';
 
@@ -228,6 +235,8 @@
   // TODO - Figure out how to stage next/previous slides without adding
   //        a ridiculous number of classes and if/else statements
 
+        FunSlider.setFrames();
+
 
         // Are we using indexes?
         if (settings.displayIndexes) {
@@ -261,6 +270,46 @@
         }
       } // .setSlides()
 
+
+    , setFrames: function() {
+
+        var framePos = 100 / $frameCount;
+
+        if ($frameCount > 0) {
+
+          // Set previous frame
+          $slides.removeAttr('style')
+            .eq($slideCounter - 2)
+              .addClass('previous-slide')
+              .css({ 'left' : -framePos + '%' })
+              ;
+
+          // Define width of each slide
+          $slides.each(function() {
+            $(this).css({ 'width' : framePos + '%' });
+          });
+
+          // Iterate over multi-frames til we list all we need
+          while ($frameCounter < $frameCount) {
+
+            $slides.eq(($slideCounter - 1 + $frameCounter) - $slideCount)
+              .addClass('next-slide')
+              .css({'left'  : framePos * $frameCounter + '%'})
+              ;
+
+            // If our counter has gone over our $slideCount
+            if ($frameCounter > $slideCount) {
+              $slides.eq(($slideCounter + $frameCounter) - $slideCount).addClass('next-slide');
+            }
+
+            // Increment frame counter
+            $frameCounter += 1;
+          }
+
+          // Reset frame counter for next init
+          $frameCounter = 0;
+        }
+      } // function setFrames();
 
 
       /**
@@ -319,6 +368,7 @@
 
     // starts the party <:-)
     FunSlider.init();
+    FunSlider.setFrames();
     FunSlider.runSlideshow();   // Init $slideshow interval
     FunSlider.navSlideshow();   // Make our Prev|Next Buttons work
 
